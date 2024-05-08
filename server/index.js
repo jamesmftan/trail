@@ -20,32 +20,46 @@ app.use(cors());
 
 const PORT = 3001;
 
-let connectedUsers = [];
+let users = [];
 
 io.on("connection", (socket) => {
-  const sendUpdatedUserList = () => {
-    io.emit("userList", connectedUsers);
-  };
-
-  socket.on("user", (user) => {
-    user.id = socket.id;
-    const existingUserIndex = connectedUsers.findIndex((u) => u.id === user.id);
+  // Userlist
+  socket.on("newUser", (newUser) => {
+    socket.join(newUser.room);
+    newUser.id = socket.id;
+    const existingUserIndex = users.findIndex((u) => u.id === newUser.id);
     if (existingUserIndex === -1) {
-      connectedUsers.push(user);
-      sendUpdatedUserList();
+      users.push(newUser);
     } else {
-      connectedUsers[existingUserIndex] = user;
-      sendUpdatedUserList();
+      users[existingUserIndex] = newUser;
     }
+    io.to(newUser.room).emit(
+      "users",
+      users.filter((u) => u.room === newUser.room)
+    );
   });
 
   socket.on("disconnect", () => {
-    connectedUsers = connectedUsers.filter((u) => u.id !== socket.id);
-    sendUpdatedUserList();
+    const user = users.find((u) => u.id === socket.id);
+    if (user) {
+      users = users.filter((u) => u.id !== socket.id);
+      io.to(user.room).emit(
+        "users",
+        users.filter((u) => u.room === user.room)
+      );
+    }
   });
 
-  socket.on("userMessage", (userMessage) => {
-    io.emit("userMessages", userMessage);
+  // Chat
+  socket.on("message", (message) => {
+    const user = users.find((u) => u.id === socket.id);
+    if (user) {
+      io.to(user.room).emit("message", {
+        id: message.id,
+        value: message.value,
+        username: user.name,
+      });
+    }
   });
 });
 

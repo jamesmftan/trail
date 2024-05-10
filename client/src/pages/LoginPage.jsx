@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { LogIn } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Modal = ({ socket }) => {
   const [isOpenModal, setIsOpenModal] = useState(true);
@@ -14,35 +15,37 @@ const Modal = ({ socket }) => {
     setRoom(event.target.value);
   };
 
+  const navigate = useNavigate();
+
   const handleRoomButtonChange = () => {
     if (name !== "") {
       const newRoom = Math.random().toString(36).substring(2, 7);
       setRoom(newRoom);
       socket.emit("newUser", { id: socket.id, name, room: newRoom });
-      setIsOpenModal(false);
+      navigate("/trail");
     }
   };
 
   const handleClick = () => {
     if (name !== "" && room !== "") {
       socket.emit("newUser", { id: socket.id, name, room });
-      setIsOpenModal(false);
+      navigate("/trail");
     }
   };
 
   return (
     <>
       {isOpenModal && (
-        <div className="fixed inset-0 shadow-2xl flex items-center justify-center bg-green-900 bg-opacity-100 p-4 lg:p-8 z-50">
-          <div className="bg-white rounded-md flex flex-col space-y-5 p-10">
+        <div className="bg-green-800 justify-center flex items-center h-screen p-8">
+          <div className="bg-white shadow-2xl rounded-md flex flex-col gap-5 p-4 lg:p-8">
             <div className="space-y-3">
               <h1 className="text-2xl font-bold">WELCOME TO TRAIL</h1>
-              <p className="text-lg">
+              <p className="text-lg font-normal leading-loose">
                 Connect with your family and friends on the map and chat with
                 them effortlessly.
               </p>
             </div>
-            <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-3">
               <input
                 type="text"
                 className="rounded-md outline-none border-2 border-slate-200 px-2 py-1"
@@ -50,21 +53,21 @@ const Modal = ({ socket }) => {
                 onChange={handleUsernameChange}
               />
               <div
-                className={`grid grid-cols-12 lg:flex lg:flex-row lg:items-center ${
+                className={`flex flex-row ${
                   name ? "" : "pointer-events-none opacity-50"
                 }`}
               >
                 <input
                   type="text"
-                  className="rounded-l-md outline-none border-t-2 border-b-2 border-l-2 border-slate-200 px-2 py-1 col-span-11"
+                  className="rounded-l-md border-t-2 border-b-2 border-l-2 border-slate-200 outline-none px-2 py-1 grow"
                   placeholder="Enter Room ID"
                   onChange={handleRoomInputChange}
                 />
                 <button
-                  className="rounded-r-md justify-center flex items-center border-2 border-slate-200 px-2 py-1"
+                  className="text-black hover:text-white bg-green-800 hover:bg-green-950 rounded-r-md  justify-center flex items-center border-2 border-slate-200 transition-all duration-300 px-2 py-1"
                   onClick={handleClick}
                 >
-                  <LogIn color="#1e293b" />
+                  <LogIn />
                 </button>
               </div>
               <p
@@ -75,7 +78,7 @@ const Modal = ({ socket }) => {
                 or
               </p>
               <button
-                className={`text-white bg-green-700 rounded-md border-2 border-slate-200 hover:bg-green-950 w-full px-2 py-1 ${
+                className={`text-white bg-green-800 hover:bg-green-950 rounded-md border-2 border-slate-200 w-full transition-all duration-300 px-2 py-1 ${
                   name && !room ? "" : "opacity-50 pointer-events-none"
                 }`}
                 onClick={handleRoomButtonChange}

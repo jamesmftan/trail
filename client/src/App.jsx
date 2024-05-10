@@ -1,21 +1,20 @@
 import React from "react";
-import Modal from "./components/Modal";
-import UserList from "./components/UserList";
-import TrailMap from "./components/TrailMap";
-import Chat from "./components/Chat";
+import LoginPage from "./pages/LoginPage";
+import MainPage from "./pages/MainPage";
 import io from "socket.io-client";
 import { SOCKET_URL } from "./configuration/index";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   const socket = io.connect(SOCKET_URL);
   return (
     <>
-      <Modal socket={socket} />
-      <div className="grid grid-cols-4 h-screen">
-        <UserList socket={socket} />
-        <TrailMap socket={socket} />
-        <Chat socket={socket} />
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginPage socket={socket} />} />
+          <Route path="/trail" element={<MainPage socket={socket} />} />
+        </Routes>
+      </Router>
     </>
   );
 };

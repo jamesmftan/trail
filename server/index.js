@@ -21,6 +21,7 @@ app.use(cors());
 const PORT = 3001;
 
 let users = [];
+let locations = [];
 
 io.on("connection", (socket) => {
   // Userlist
@@ -39,6 +40,7 @@ io.on("connection", (socket) => {
     );
   });
 
+  // Disconnect
   socket.on("disconnect", () => {
     const user = users.find((u) => u.id === socket.id);
     if (user) {
@@ -47,6 +49,13 @@ io.on("connection", (socket) => {
         "users",
         users.filter((u) => u.room === user.room)
       );
+    }
+
+    // Remove location associated with the disconnected socket
+    const locationIndex = locations.findIndex((l) => l.id === socket.id);
+    if (locationIndex !== -1) {
+      locations.splice(locationIndex, 1);
+      io.emit("userLocation", locations);
     }
   });
 
@@ -59,6 +68,31 @@ io.on("connection", (socket) => {
         value: message.value,
         username: user.name,
       });
+    }
+  });
+
+  // Location
+  socket.on("location", (location) => {
+    location.id = socket.id;
+    const user = users.find((u) => u.id === location.id);
+    const existingLocationIndex = locations.findIndex(
+      (l) => l.id === location.id
+    );
+
+    if (existingLocationIndex === -1) {
+      locations.push(location);
+    } else {
+      locations[existingLocationIndex] = location;
+    }
+
+    if (user) {
+      const locationsInRoom = locations.filter(
+        (l) => users.find((u) => u.id === l.id)?.room === user.room
+      );
+      io.to(user.room).emit("userLocation", locationsInRoom);
+      console.log("room:", user.room);
+    } else {
+      console.log("User not found for socket ID:", socket.id);
     }
   });
 });

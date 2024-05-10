@@ -1,8 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  background: linear-gradient(0deg, rgb(6, 104, 86), rgb(6, 104, 86)),
-    url(./assets/grainy.svg);
-}

@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Users, MessageSquare, SendHorizontal, X } from "lucide-react";
+import {
+  Users,
+  MessageSquare,
+  Clipboard,
+  SendHorizontal,
+  X,
+} from "lucide-react";
 
-const Chat = ({ socket }) => {
-  const [value, setValue] = useState("");
+const BottomButtons = ({ socket }) => {
+  const [messageValue, setMessageValue] = useState("");
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [trailersModalOpen, setTrailersModalOpen] = useState(false);
+  const [copy, setCopy] = useState(false);
+  const roomID = connectedUsers[0]?.room;
 
   useEffect(() => {
     socket.on("users", (usernameList) => {
@@ -23,13 +31,13 @@ const Chat = ({ socket }) => {
     };
   }, [socket]);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
+  const messageChange = (event) => {
+    setMessageValue(event.target.value);
   };
 
-  const handleClick = () => {
-    socket.emit("message", { value, id: socket.id });
-    setValue("");
+  const messageClick = () => {
+    socket.emit("message", { messageValue, id: socket.id });
+    setMessageValue("");
   };
 
   const trailersClicked = () => {
@@ -40,9 +48,18 @@ const Chat = ({ socket }) => {
     setChatModalOpen(!chatModalOpen);
   };
 
+  const copyRoomID = () => {
+    if (roomID) {
+      navigator.clipboard.writeText(roomID).then(() => {
+        setCopy(true);
+        setTimeout(() => setCopy(false), 1000);
+      });
+    }
+  };
+
   return (
     <>
-      <div className="text-black text-center font-normal bg-white opacity-[80%] backdrop-blur-3xl justify-center flex flex-row items-center rounded-full border-2 border-slate-200 fixed bottom-5 z-50 gap-10 pt-3 pb-3 pl-8 pr-8 lg:pl-10 lg:pr-10">
+      <div className="text-black text-center font-normal bg-slate-200 opacity-[80%] backdrop-blur-3xl justify-center flex flex-row items-center rounded-full border-2 border-white fixed bottom-5 z-50 gap-10 pt-3 pb-3 pl-8 pr-8 lg:pl-10 lg:pr-10">
         <button
           className="flex flex-col items-center gap-1"
           onClick={trailersClicked}
@@ -56,6 +73,13 @@ const Chat = ({ socket }) => {
         >
           <MessageSquare />
           <span>Chat</span>
+        </button>
+        <button
+          className="flex flex-col items-center gap-1"
+          onClick={copyRoomID}
+        >
+          <Clipboard />
+          {copy ? <span>Copied</span> : <span>Room ID</span>}
         </button>
       </div>
       {chatModalOpen && (
@@ -74,7 +98,7 @@ const Chat = ({ socket }) => {
                     className="flex flex-col items-start space-y-1"
                   >
                     <h1 className="ml-1">{message.username}</h1>
-                    <p className="text-base text-center bg-slate-200 rounded-md px-3 py-2">
+                    <p className="text-base text-center bg-slate-200 rounded-md max-w-lg px-3 py-2">
                       {message.value}
                     </p>
                   </div>
@@ -84,7 +108,7 @@ const Chat = ({ socket }) => {
                     className="flex flex-col items-end space-y-1"
                   >
                     <h1 className="mr-1">{message.username}</h1>
-                    <p className="text-base text-center bg-slate-200 rounded-md px-3 py-2">
+                    <p className="text-base text-center bg-slate-200 rounded-md max-w-lg px-3 py-2">
                       {message.value}
                     </p>
                   </div>
@@ -96,10 +120,10 @@ const Chat = ({ socket }) => {
                 className="grow outline-none"
                 type="text"
                 placeholder="Write a message..."
-                value={value}
-                onChange={handleChange}
+                value={messageValue}
+                onChange={messageChange}
               />
-              <button onClick={handleClick}>
+              <button onClick={messageClick}>
                 <SendHorizontal />
               </button>
             </div>
@@ -122,7 +146,7 @@ const Chat = ({ socket }) => {
                 >
                   <p className="flex flex-row items-center">
                     <span className="rounded-full w-3 h-3 mr-3 bg-green-800"></span>
-                    {connectedUser.name}
+                    {connectedUser.username}
                   </p>
                   <p>5km</p>
                 </li>
@@ -135,4 +159,4 @@ const Chat = ({ socket }) => {
   );
 };
 
-export default Chat;
+export default BottomButtons;

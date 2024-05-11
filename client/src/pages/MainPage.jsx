@@ -1,16 +1,16 @@
 import React from "react";
-import Map from "../components/Map";
-import Chat from "../components/Chat";
+import TrailMap from "../components/TrailMap";
+import BottomButtons from "../components/BottomButtons";
 
-const Trail = ({ socket }) => {
+const MainPage = ({ socket }) => {
   return (
     <>
       <div className="flex flex-col justify-center items-center relative h-screen">
-        <Map socket={socket}></Map>
-        <Chat socket={socket}></Chat>
+        <TrailMap socket={socket}></TrailMap>
+        <BottomButtons socket={socket}></BottomButtons>
       </div>
     </>
   );
 };
 
-export default Trail;
+export default MainPage;

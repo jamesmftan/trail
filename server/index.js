@@ -51,7 +51,6 @@ io.on("connection", (socket) => {
       );
     }
 
-    // Remove location associated with the disconnected socket
     const locationIndex = locations.findIndex((l) => l.id === socket.id);
     if (locationIndex !== -1) {
       locations.splice(locationIndex, 1);
@@ -65,8 +64,8 @@ io.on("connection", (socket) => {
     if (user) {
       io.to(user.room).emit("message", {
         id: message.id,
-        value: message.value,
-        username: user.name,
+        value: message.messageValue,
+        username: user.username,
       });
     }
   });
@@ -89,6 +88,7 @@ io.on("connection", (socket) => {
       const locationsInRoom = locations.filter(
         (l) => users.find((u) => u.id === l.id)?.room === user.room
       );
+      location.username = user.username;
       io.to(user.room).emit("userLocation", locationsInRoom);
       console.log("room:", user.room);
     } else {

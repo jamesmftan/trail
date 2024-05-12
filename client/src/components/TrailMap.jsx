@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
+import TopContent from "./TopContent";
 import { Map, Marker, ZoomControl } from "pigeon-maps";
 import { MapPin } from "lucide-react";
 
 const TrailMap = ({ socket }) => {
   const [userLocations, setUserLocations] = useState([]);
   const [myLocation, setMyLocation] = useState(null);
-  const [randomFillColor, setRandomFillColor] = useState("#000000");
 
   const getRandomColor = () => {
     const letters = "0123456789ABCDEF";
@@ -15,7 +15,7 @@ const TrailMap = ({ socket }) => {
     }
     return color;
   };
-
+  const color = getRandomColor();
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
@@ -23,6 +23,7 @@ const TrailMap = ({ socket }) => {
         socket.emit("location", {
           id: socket.id,
           username: "",
+          color: color,
           latitude,
           longitude,
         });
@@ -37,8 +38,6 @@ const TrailMap = ({ socket }) => {
       setUserLocations(userLocation);
     });
 
-    setRandomFillColor(getRandomColor());
-
     return () => {
       navigator.geolocation.clearWatch(watchId);
       socket.off("userLocation");
@@ -49,10 +48,7 @@ const TrailMap = ({ socket }) => {
     <>
       {myLocation && (
         <>
-          <div className="text-black text-center font-normal bg-slate-200 opacity-[80%] backdrop-blur-3xl justify-center flex flex-row items-center rounded-full border-2 border-white fixed top-5 z-50 gap-10 pt-3 pb-3 pl-8 pr-8 lg:pl-20 lg:pr-20">
-            <p>Latitude: {myLocation.latitude}</p>
-            <p>Longitude: {myLocation.longitude}</p>
-          </div>
+          <TopContent myLocation={myLocation} />
           <Map
             className="h-full w-full"
             center={[myLocation.latitude, myLocation.longitude]}
@@ -69,7 +65,7 @@ const TrailMap = ({ socket }) => {
                   </span>
                   <MapPin
                     size={60}
-                    fill={randomFillColor}
+                    fill={location.color}
                     color="white"
                     strokeWidth={1}
                   />

@@ -13,6 +13,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginPage socket={socket} />} />
           <Route path="/trail" element={<MainPage socket={socket} />} />
+          <Route path="*" element={<LoginPage socket={socket} />} />
         </Routes>
       </Router>
     </>

@@ -26,6 +26,7 @@ let locations = [];
 io.on("connection", (socket) => {
   // Userlist
   socket.on("newUser", (newUser) => {
+    console.log(newUser);
     socket.join(newUser.room);
     newUser.id = socket.id;
     const existingUserIndex = users.findIndex((u) => u.id === newUser.id);
@@ -90,9 +91,6 @@ io.on("connection", (socket) => {
       );
       location.username = user.username;
       io.to(user.room).emit("userLocation", locationsInRoom);
-      console.log("room:", user.room);
-    } else {
-      console.log("User not found for socket ID:", socket.id);
     }
   });
 });

@@ -7,6 +7,7 @@ const ChatModal = ({
   messageChange,
   messageClick,
   chatClick,
+  enterKeyPress,
 }) => {
   return (
     <div className="bg-none justify-center flex flex-row items-center border-2 border-slate-200 mx-auto fixed inset-0 z-50 gap-10 pt-3 pb-3 pl-10 pr-10">
@@ -18,16 +19,16 @@ const ChatModal = ({
         </div>
         <div className="h-[90%] space-y-10 p-5 overflow-y-auto">
           {messages.map((message, index) =>
-            message.id !== socket.id ? (
-              <div key={index} className="flex flex-col items-start space-y-1">
-                <h1 className="ml-1">{message.username}</h1>
+            message.id === socket.id ? (
+              <div key={index} className="flex flex-col items-end space-y-1">
+                <h1 className="mr-1">You</h1>
                 <p className="text-base text-center bg-slate-200 rounded-md max-w-lg px-3 py-2">
                   {message.value}
                 </p>
               </div>
             ) : (
-              <div key={index} className="flex flex-col items-end space-y-1">
-                <h1 className="mr-1">{message.username}</h1>
+              <div key={index} className="flex flex-col items-start space-y-1">
+                <h1 className="ml-1">{message.username}</h1>
                 <p className="text-base text-center bg-slate-200 rounded-md max-w-lg px-3 py-2">
                   {message.value}
                 </p>
@@ -42,6 +43,7 @@ const ChatModal = ({
             placeholder="Write a message..."
             value={messageValue}
             onChange={messageChange}
+            onKeyPress={enterKeyPress}
           />
           <button onClick={messageClick}>
             <SendHorizontal />

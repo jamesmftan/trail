@@ -4,6 +4,7 @@ import TrailersModal from "./TrailersModal";
 import BottomButtons from "./BottomButtons";
 
 const BottomContent = ({ socket }) => {
+  const [myLocation, setMyLocation] = useState(null);
   const [messageValue, setMessageValue] = useState("");
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -13,6 +14,11 @@ const BottomContent = ({ socket }) => {
   const roomID = connectedUsers[0]?.room;
 
   useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      setMyLocation({ latitude, longitude });
+    });
+
     socket.on("users", (usernameList) => {
       setConnectedUsers(usernameList);
     });
@@ -22,6 +28,7 @@ const BottomContent = ({ socket }) => {
     });
 
     return () => {
+      navigator.geolocation.clearWatch(watchId);
       socket.off("users");
       socket.off("message");
     };
@@ -31,9 +38,17 @@ const BottomContent = ({ socket }) => {
     setMessageValue(event.target.value);
   };
 
-  const messageClick = async () => {
-    socket.emit("message", { messageValue, id: socket.id });
-    setMessageValue("");
+  const messageClick = () => {
+    if (messageValue !== "") {
+      socket.emit("message", { messageValue, id: socket.id });
+      setMessageValue("");
+    }
+  };
+
+  const enterKeyPress = (event) => {
+    if (event.key === "Enter") {
+      messageClick();
+    }
   };
 
   const trailersClick = () => {
@@ -69,10 +84,13 @@ const BottomContent = ({ socket }) => {
           messageChange={messageChange}
           messageClick={messageClick}
           chatClick={chatClick}
+          enterKeyPress={enterKeyPress}
         />
       )}
       {trailersModalOpen && (
         <TrailersModal
+          socket={socket}
+          myLocation={myLocation}
           trailersClick={trailersClick}
           connectedUsers={connectedUsers}
         />

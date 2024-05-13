@@ -26,7 +26,6 @@ let locations = [];
 io.on("connection", (socket) => {
   // Userlist
   socket.on("newUser", (newUser) => {
-    console.log(newUser);
     socket.join(newUser.room);
     newUser.id = socket.id;
     const existingUserIndex = users.findIndex((u) => u.id === newUser.id);
@@ -35,10 +34,6 @@ io.on("connection", (socket) => {
     } else {
       users[existingUserIndex] = newUser;
     }
-    io.to(newUser.room).emit(
-      "users",
-      users.filter((u) => u.room === newUser.room)
-    );
   });
 
   // Disconnect
@@ -91,6 +86,16 @@ io.on("connection", (socket) => {
       );
       location.username = user.username;
       io.to(user.room).emit("userLocation", locationsInRoom);
+
+      const userIndex = users.findIndex((u) => u.id === location.id);
+      if (userIndex !== -1) {
+        users[userIndex].latitude = location.latitude;
+        users[userIndex].longitude = location.longitude;
+      }
+      io.to(user.room).emit(
+        "users",
+        users.filter((u) => u.room === user.room)
+      );
     }
   });
 });

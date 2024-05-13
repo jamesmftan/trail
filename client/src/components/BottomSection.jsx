@@ -8,6 +8,7 @@ const BottomContent = ({ socket }) => {
   const [messageValue, setMessageValue] = useState("");
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [chatNotifications, setChatNotications] = useState([]);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [trailersModalOpen, setTrailersModalOpen] = useState(false);
   const [copy, setCopy] = useState(false);
@@ -25,6 +26,7 @@ const BottomContent = ({ socket }) => {
 
     socket.on("message", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
+      setChatNotications((prevMessages) => [...prevMessages, message]);
     });
 
     return () => {
@@ -57,7 +59,12 @@ const BottomContent = ({ socket }) => {
 
   const chatClick = () => {
     setChatModalOpen(!chatModalOpen);
+    chatNotifications.length = 0;
   };
+
+  if (chatModalOpen === true) {
+    chatNotifications.length = 0;
+  }
 
   const copyRoomID = () => {
     if (roomID) {
@@ -71,6 +78,8 @@ const BottomContent = ({ socket }) => {
   return (
     <>
       <BottomButtons
+        connectedUsers={connectedUsers}
+        chatNotifications={chatNotifications}
         trailersClick={trailersClick}
         chatClick={chatClick}
         copyRoomID={copyRoomID}

@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import io from "socket.io-client";
 import { SOCKET_URL } from "./configuration/index";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
 
 const App = () => {
   const socket = io.connect(SOCKET_URL);

@@ -47,12 +47,6 @@ const BottomContent = ({ socket }) => {
     }
   };
 
-  const enterKeyPress = (event) => {
-    if (event.key === "Enter") {
-      messageClick();
-    }
-  };
-
   const trailersClick = () => {
     setTrailersModalOpen(!trailersModalOpen);
   };
@@ -93,7 +87,6 @@ const BottomContent = ({ socket }) => {
           messageChange={messageChange}
           messageClick={messageClick}
           chatClick={chatClick}
-          enterKeyPress={enterKeyPress}
         />
       )}
       {trailersModalOpen && (

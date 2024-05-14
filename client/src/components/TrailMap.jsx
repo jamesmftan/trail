@@ -58,7 +58,10 @@ const TrailMap = ({ socket }) => {
             defaultZoom={3}
             minZoom={3}
             maxZoom={20}
+            attributionPrefix={false}
+            attribution={false}
           >
+            <ZoomControl />
             {userLocations.map((location) => (
               <Marker
                 key={location.id}
@@ -67,7 +70,7 @@ const TrailMap = ({ socket }) => {
               >
                 {location.id === socket.id ? (
                   <div className="flex flex-col items-center">
-                    <span className="text-black font-bold bg-slate-200 opacity-[80%] backdrop-blur-3xl rounded-md border-2 border-white px-2 py-3">
+                    <span className="text-black font-bold bg-slate-200 opacity-[80%] backdrop-blur-3xl rounded-md border-2 border-white border-opacity-50 px-3 py-2">
                       You
                     </span>
                     <MapPin
@@ -79,7 +82,7 @@ const TrailMap = ({ socket }) => {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <span className="text-black font-bold bg-slate-200 opacity-[80%] backdrop-blur-3xl rounded-md border-2 border-white px-2 py-3">
+                    <span className="text-black font-bold bg-slate-200 opacity-[80%] backdrop-blur-3xl rounded-md border-2 border-white border-opacity-50 px-3 py-2">
                       {location.username}
                     </span>
                     <MapPin

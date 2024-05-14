@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { SendHorizontal, X } from "lucide-react";
 const ChatModal = ({
   socket,
@@ -7,46 +7,74 @@ const ChatModal = ({
   messageChange,
   messageClick,
   chatClick,
-  enterKeyPress,
 }) => {
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    const element = document.querySelector(".scroll-to-bottom");
+    element.scrollTop = element.scrollHeight;
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const enterKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      messageClick();
+      scrollToBottom();
+    }
+  };
+
   return (
-    <div className="bg-none justify-center flex flex-row items-center border-2 border-slate-200 mx-auto fixed inset-0 z-50 gap-10 pt-3 pb-3 pl-10 pr-10">
+    <div className="bg-slate-700 bg-opacity-50 justify-center flex flex-row items-center mx-auto fixed inset-0 z-50 gap-10 pt-3 pb-3 pl-8 pr-8 lg:pl-10 lg:pr-10">
       <div className="bg-white backdrop-blur-3xl rounded-lg shadow-lg flex flex-col justify-between min-w-72 w-1/2 min-h-96 h-1/2">
-        <div className="justify-end flex items-center border-b-2 p-5">
-          <button onClick={chatClick}>
-            <X />
+        <div className="border-b-2 border-slate-200 justify-end flex items-center p-3">
+          <button
+            className="hover:bg-slate-200 rounded-[4px] px-3 py-2 transition-all duration-300"
+            onClick={chatClick}
+          >
+            <X color="#334454" />
           </button>
         </div>
-        <div className="h-[90%] space-y-10 p-5 overflow-y-auto">
+        <div className="h-full space-y-10 p-5 overflow-x-hidden overflow-y-auto scroll-to-bottom">
           {messages.map((message, index) =>
             message.id === socket.id ? (
               <div key={index} className="flex flex-col items-end space-y-1">
-                <h1 className="mr-1">You</h1>
-                <p className="text-base text-center bg-slate-200 rounded-md max-w-lg px-3 py-2">
+                <h1 className="text-slate-700 font-medium mr-1">You</h1>
+                <p className="text-slate-700 font-normal tracking-tight leading-loose break-words whitespace-pre-wrap bg-slate-200 rounded-[4px] max-w-96 px-3 py-2">
                   {message.value}
                 </p>
               </div>
             ) : (
               <div key={index} className="flex flex-col items-start space-y-1">
-                <h1 className="ml-1">{message.username}</h1>
-                <p className="text-base text-center bg-slate-200 rounded-md max-w-lg px-3 py-2">
+                <h1 className="text-slate-700 font-medium ml-1">
+                  {message.username}
+                </h1>
+                <p className="text-slate-700 font-normal tracking-tight leading-loose bg-slate-200 rounded-[4px] max-w-96 px-3 py-2">
                   {message.value}
                 </p>
               </div>
             )
           )}
+          <div ref={messagesEndRef} onKeyDown={enterKeyPress} tabIndex={-1} />
         </div>
-        <div className="flex flex-row items-center border-t-2 p-5">
-          <input
-            className="grow outline-none"
+        <div className="border-t-2 border-slate-200 flex flex-row items-center p-3">
+          <textarea
+            className="resize-none outline-none grow p-3"
             type="text"
             placeholder="Write a message..."
+            rows={1}
             value={messageValue}
             onChange={messageChange}
             onKeyPress={enterKeyPress}
           />
-          <button onClick={messageClick}>
-            <SendHorizontal />
+          <button
+            className="hover:bg-slate-200 rounded-[4px] px-3 py-2 transition-all duration-300"
+            onClick={messageClick}
+          >
+            <SendHorizontal color="#334454" />
           </button>
         </div>
       </div>

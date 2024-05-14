@@ -37,8 +37,10 @@ const LoginPage = ({ socket }) => {
       <div className="bg-green-800 justify-center flex items-center h-screen p-8">
         <div className="bg-white shadow-2xl rounded-md flex flex-col gap-5 p-4 lg:p-8">
           <div className="space-y-3">
-            <h1 className="text-2xl font-bold">WELCOME TO TRAIL</h1>
-            <p className="text-lg font-normal leading-loose">
+            <h1 className="text-2xl text-slate-700 font-bold">
+              WELCOME TO TRAIL
+            </h1>
+            <p className="text-lg text-slate-700 font-medium tracking-tight leading-loose">
               Connect with your family and friends on the map and chat with them
               effortlessly.
             </p>
@@ -62,7 +64,7 @@ const LoginPage = ({ socket }) => {
                 onChange={handleRoomInputChange}
               />
               <button
-                className="text-black hover:text-white bg-green-800 hover:bg-green-950 rounded-r-md  justify-center flex items-center border-2 border-slate-200 transition-all duration-300 px-2 py-1"
+                className="text-white bg-green-800 hover:bg-green-950 rounded-r-md justify-center flex items-center border-2 border-slate-200 transition-all duration-300 px-2 py-1"
                 onClick={newUserClick}
               >
                 <LogIn />

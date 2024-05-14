@@ -9,16 +9,19 @@ const TrailersModal = ({
   connectedUsers,
 }) => {
   return (
-    <div className="bg-none justify-center flex flex-row items-center border-2 border-slate-200 mx-auto fixed inset-0 z-50 gap-10 pt-3 pb-3 pl-10 pr-10">
+    <div className="bg-slate-700 bg-opacity-50 justify-center flex flex-row items-center mx-auto fixed inset-0 z-50 gap-10 pt-3 pb-3 pl-8 pr-8 lg:pl-10 lg:pr-10">
       <div className="bg-white backdrop-blur-3xl rounded-lg shadow-lg flex flex-col justify-between min-w-72 w-1/2 min-h-96 h-1/2">
-        <div className="justify-end flex items-center border-b-2 p-5">
-          <button onClick={trailersClick}>
-            <X />
+        <div className="border-b-2 border-slate-200 justify-end flex items-center p-3">
+          <button
+            className="hover:bg-slate-200 rounded-[4px] px-3 py-2 transition-all duration-300"
+            onClick={trailersClick}
+          >
+            <X color="#334454" />
           </button>
         </div>
-        <ul className="text-xl text-black h-full space-y-3 p-5 overflow-y-auto">
-          <li className="flex flex-row justify-between border-b border-slate-200 pb-2 pl-2">
-            <p className="flex flex-row items-center">
+        <ul className="h-full space-y-3 p-5 overflow-y-auto">
+          <li className="border-b border-slate-200 pb-2 pl-2">
+            <p className="text-xl text-slate-700 font-medium flex flex-row items-center">
               <span className="rounded-full w-3 h-3 mr-3 bg-green-800"></span>
               You
             </p>
@@ -36,13 +39,15 @@ const TrailersModal = ({
             return connectedUser.id !== socket.id ? (
               <li
                 key={index}
-                className="flex flex-row justify-between border-b border-slate-200 pb-2 pl-2"
+                className="flex flex-row justify-between border-b border-slate-200 gap-5 pb-2 pl-2"
               >
-                <p className="flex flex-row items-center">
+                <p className="text-xl text-slate-700 font-medium flex flex-row items-center">
                   <span className="rounded-full w-3 h-3 mr-3 bg-green-800"></span>
                   {connectedUser.username}
                 </p>
-                <p>{distance} KM</p>
+                <p className="text-xl text-slate-700 font-medium">
+                  {distance} KM
+                </p>
               </li>
             ) : null;
           })}

@@ -20,14 +20,14 @@ const LoginPage = ({ socket }) => {
     if (username !== "") {
       const newRoom = Math.random().toString(36).substring(2, 7);
       setRoom(newRoom);
-      socket.emit("newUser", { id: socket.id, username, room: newRoom });
+      socket.emit("newUser", { username, room: newRoom });
       navigate("/trail");
     }
   };
 
   const newUserClick = () => {
     if (username !== "" && room !== "") {
-      socket.emit("newUser", { id: socket.id, username, room });
+      socket.emit("newUser", { username, room });
       navigate("/trail");
     }
   };

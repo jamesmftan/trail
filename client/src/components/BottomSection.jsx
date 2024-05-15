@@ -40,7 +40,7 @@ const BottomContent = ({ socket }) => {
 
   const messageClick = () => {
     if (messageValue !== "") {
-      socket.emit("message", { messageValue, id: socket.id });
+      socket.emit("message", { messageValue });
       setMessageValue("");
     }
   };

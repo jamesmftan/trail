@@ -13,8 +13,6 @@ const TrailMap = ({ socket }) => {
     const watchId = navigator.geolocation.watchPosition((position) => {
       const { latitude, longitude } = position.coords;
       socket.emit("location", {
-        id: socket.id,
-        username: "",
         color: color,
         latitude,
         longitude,

@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.ORIGIN.split(","),
+    origin: process.env.ORIGIN ? process.env.ORIGIN.split(",") : "*",
     methods: ["GET", "POST"],
     allowedHeaders: ["Access-Control-Allow-Origin", "Content-Type"],
     credentials: true,
@@ -18,84 +18,65 @@ const io = new Server(server, {
 
 app.use(cors());
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-let users = [];
-let locations = [];
+const users = new Map();
+const locations = new Map();
+
+const getUsersInRoom = (room) => {
+  return Array.from(users.values()).filter((user) => user.room === room);
+};
+
+const getLocationsInRoom = (room) => {
+  return Array.from(locations.values()).filter((location) => {
+    const user = users.get(location.id);
+    return user && user.room === room;
+  });
+};
 
 io.on("connection", (socket) => {
-  // Userlist
   socket.on("newUser", (newUser) => {
-    socket.join(newUser.room);
     newUser.id = socket.id;
-    const existingUserIndex = users.findIndex((u) => u.id === newUser.id);
-    if (existingUserIndex === -1) {
-      users.push(newUser);
-    } else {
-      users[existingUserIndex] = newUser;
-    }
+    users.set(newUser.id, newUser);
+    socket.join(newUser.room);
+    io.to(newUser.room).emit("users", getUsersInRoom(newUser.room));
   });
 
-  // Disconnect
-  socket.on("disconnect", () => {
-    const user = users.find((u) => u.id === socket.id);
-    if (user) {
-      users = users.filter((u) => u.id !== socket.id);
-      io.to(user.room).emit(
-        "users",
-        users.filter((u) => u.room === user.room)
-      );
-    }
-
-    const locationIndex = locations.findIndex((l) => l.id === socket.id);
-    if (locationIndex !== -1) {
-      locations.splice(locationIndex, 1);
-      io.emit("userLocation", locations);
-    }
-  });
-
-  // Chat
   socket.on("message", (message) => {
-    const user = users.find((u) => u.id === socket.id);
+    const user = users.get(socket.id);
     if (user) {
       io.to(user.room).emit("message", {
-        id: message.id,
-        value: message.messageValue,
+        id: socket.id,
         username: user.username,
+        value: message.messageValue,
       });
     }
   });
 
-  // Location
   socket.on("location", (location) => {
     location.id = socket.id;
-    const user = users.find((u) => u.id === location.id);
-    const existingLocationIndex = locations.findIndex(
-      (l) => l.id === location.id
-    );
+    const user = users.get(location.id);
+    if (user) {
+      location.username = user.username;
+      locations.set(location.id, location);
+      io.to(user.room).emit("userLocation", getLocationsInRoom(user.room));
 
-    if (existingLocationIndex === -1) {
-      locations.push(location);
-    } else {
-      locations[existingLocationIndex] = location;
+      user.latitude = location.latitude;
+      user.longitude = location.longitude;
+      io.to(user.room).emit("users", getUsersInRoom(user.room));
+    }
+  });
+
+  socket.on("disconnect", () => {
+    const user = users.get(socket.id);
+    if (user) {
+      users.delete(user.id);
+      io.to(user.room).emit("users", getUsersInRoom(user.room));
     }
 
-    if (user) {
-      const locationsInRoom = locations.filter(
-        (l) => users.find((u) => u.id === l.id)?.room === user.room
-      );
-      location.username = user.username;
-      io.to(user.room).emit("userLocation", locationsInRoom);
-
-      const userIndex = users.findIndex((u) => u.id === location.id);
-      if (userIndex !== -1) {
-        users[userIndex].latitude = location.latitude;
-        users[userIndex].longitude = location.longitude;
-      }
-      io.to(user.room).emit(
-        "users",
-        users.filter((u) => u.room === user.room)
-      );
+    if (locations.has(socket.id)) {
+      locations.delete(socket.id);
+      io.emit("userLocation", Array.from(locations.values()));
     }
   });
 });

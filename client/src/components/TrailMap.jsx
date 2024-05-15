@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
-import TopContent from "./TopContent";
 import { calculateMidpoint } from "../javascript/CalculateMidpoint";
 import { getRandomColor } from "../javascript/GetRandomColor";
-import { useNavigate } from "react-router-dom";
-
 import { Map, Marker, ZoomControl } from "pigeon-maps";
 import { MapPin } from "lucide-react";
 
 const TrailMap = ({ socket }) => {
-  const [userLocations, setUserLocations] = useState([]);
   const [midPoint, setMidPoint] = useState(null);
+  const [userLocations, setUserLocations] = useState([]);
   const color = getRandomColor();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition((position) => {
@@ -42,15 +37,10 @@ const TrailMap = ({ socket }) => {
     };
   }, [socket]);
 
-  const logOut = () => {
-    navigate("/");
-  };
-
   return (
     <>
       {midPoint && (
         <>
-          <TopContent logOut={logOut} />
           <Map
             className="h-full w-full"
             limitBounds="edge"

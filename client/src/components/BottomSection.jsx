@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import BottomButtons from "./BottomButtons";
 import ChatModal from "./ChatModal";
 import TrailersModal from "./TrailersModal";
-import BottomButtons from "./BottomButtons";
 
 const BottomContent = ({ socket }) => {
   const [myLocation, setMyLocation] = useState(null);
@@ -11,8 +11,6 @@ const BottomContent = ({ socket }) => {
   const [chatNotifications, setChatNotications] = useState([]);
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const [trailersModalOpen, setTrailersModalOpen] = useState(false);
-  const [copy, setCopy] = useState(false);
-  const roomID = connectedUsers[0]?.room;
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition((position) => {
@@ -47,11 +45,11 @@ const BottomContent = ({ socket }) => {
     }
   };
 
-  const trailersClick = () => {
+  const trailersModalClick = () => {
     setTrailersModalOpen(!trailersModalOpen);
   };
 
-  const chatClick = () => {
+  const chatModalClick = () => {
     setChatModalOpen(!chatModalOpen);
     chatNotifications.length = 0;
   };
@@ -60,24 +58,13 @@ const BottomContent = ({ socket }) => {
     chatNotifications.length = 0;
   }
 
-  const copyRoomID = () => {
-    if (roomID) {
-      navigator.clipboard.writeText(roomID).then(() => {
-        setCopy(true);
-        setTimeout(() => setCopy(false), 1000);
-      });
-    }
-  };
-
   return (
     <>
       <BottomButtons
         connectedUsers={connectedUsers}
         chatNotifications={chatNotifications}
-        trailersClick={trailersClick}
-        chatClick={chatClick}
-        copyRoomID={copyRoomID}
-        copy={copy}
+        trailersModalClick={trailersModalClick}
+        chatModalClick={chatModalClick}
       />
       {chatModalOpen && (
         <ChatModal
@@ -86,14 +73,14 @@ const BottomContent = ({ socket }) => {
           messageValue={messageValue}
           messageChange={messageChange}
           messageClick={messageClick}
-          chatClick={chatClick}
+          chatModalClick={chatModalClick}
         />
       )}
       {trailersModalOpen && (
         <TrailersModal
           socket={socket}
           myLocation={myLocation}
-          trailersClick={trailersClick}
+          trailersModalClick={trailersModalClick}
           connectedUsers={connectedUsers}
         />
       )}

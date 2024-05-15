@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { SendHorizontal, X } from "lucide-react";
+
 const ChatModal = ({
   socket,
   messages,

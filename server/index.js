@@ -40,6 +40,7 @@ io.on("connection", (socket) => {
     users.set(newUser.id, newUser);
     socket.join(newUser.room);
     io.to(newUser.room).emit("users", getUsersInRoom(newUser.room));
+    console.log(users);
   });
 
   socket.on("message", (message) => {

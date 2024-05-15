@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ExitModal from "./ExitModal";
 import { LogOut } from "lucide-react";
 
-const TopContent = () => {
+const ExitButton = () => {
   const [exitModalOpen, setExitModalOpen] = useState(false);
   const exitModalClick = () => {
     setExitModalOpen(!exitModalOpen);
@@ -20,4 +20,4 @@ const TopContent = () => {
   );
 };
 
-export default TopContent;
+export default ExitButton;

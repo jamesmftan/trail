@@ -17,13 +17,13 @@ const ExitModal = ({ exitModalClick }) => {
           </p>
           <div className="flex flex-row gap-5">
             <button
-              className="hover:text-white bg-slate-200 hover:bg-slate-700 rounded-md border-2 border-slate-200 px-5 py-1 transition-all duration-300"
+              className="text-white bg-slate-500 hover:bg-slate-900 shadow-lg rounded-md border-2 border-slate-200 px-5 py-1.5 transition-all duration-300"
               onClick={exitModalClick}
             >
               Cancel
             </button>
             <button
-              className="hover:text-white bg-red-500 hover:bg-red-900 rounded-md border-2 border-slate-200 px-5 py-1 duration-300"
+              className="text-white bg-red-500 hover:bg-red-900 shadow-lg rounded-md border-2 border-slate-200 px-5 py-1.5 transition-all duration-300"
               onClick={logOut}
             >
               Leave

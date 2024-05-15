@@ -3,7 +3,7 @@ import BottomButtons from "./BottomButtons";
 import ChatModal from "./ChatModal";
 import TrailersModal from "./TrailersModal";
 
-const BottomContent = ({ socket }) => {
+const BottomSection = ({ socket }) => {
   const [myLocation, setMyLocation] = useState(null);
   const [messageValue, setMessageValue] = useState("");
   const [connectedUsers, setConnectedUsers] = useState([]);
@@ -88,4 +88,4 @@ const BottomContent = ({ socket }) => {
   );
 };
 
-export default BottomContent;
+export default BottomSection;

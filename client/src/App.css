@@ -1,4 +1,5 @@
 .pigeon-zoom-buttons {
+  position: fixed;
   top: 20px !important;
   left: 20px !important;
   display: flex !important;

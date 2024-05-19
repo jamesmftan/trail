@@ -2,7 +2,7 @@ import React from "react";
 
 const LoadingPage = () => {
   return (
-    <div className="bg-green-800 justify-center flex flex-col items-center h-screen gap-5  pt-3 pb-3 pl-8 pr-8 lg:pl-10 lg:pr-10">
+    <div className="bg-green-800 justify-center flex flex-col items-center h-screen gap-5 p-8">
       <svg
         aria-hidden="true"
         className="inline w-10 h-10 text-slate-700 animate-spin fill-slate-200"

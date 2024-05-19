@@ -9,7 +9,7 @@ const ReturnToLoginPage = () => {
     navigate("/");
   };
   return (
-    <div className="bg-green-800 justify-center flex flex-col items-center h-screen gap-5 pt-3 pb-3 pl-8 pr-8 lg:pl-10 lg:pr-10">
+    <div className="bg-green-800 justify-center flex flex-col items-center h-screen gap-5 p-8">
       <p className="text-xl text-center text-slate-200 font-normal tracking-tight leading-loose">
         YOU'VE BEEN DISCONNECTED, RETURN TO LOGIN PAGE.
       </p>

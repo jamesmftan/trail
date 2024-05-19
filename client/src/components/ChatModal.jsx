@@ -44,7 +44,7 @@ const ChatModal = ({
             message.id === socket.id ? (
               <div key={index} className="flex flex-col items-end space-y-1">
                 <h1 className="text-slate-700 font-medium mr-1">You</h1>
-                <p className="text-slate-700 font-normal tracking-tight leading-loose break-words whitespace-pre-wrap bg-slate-200 rounded-[4px] w-1/2 lg:w-2/5 px-3 py-2">
+                <p className="text-slate-700 font-normal tracking-tight leading-loose break-words whitespace-pre-wrap bg-slate-200 rounded-[4px] max-w-[50%] lg:max-w-[40%] px-3 py-2">
                   {message.value}
                 </p>
               </div>
@@ -53,7 +53,7 @@ const ChatModal = ({
                 <h1 className="text-slate-700 font-medium ml-1">
                   {message.username}
                 </h1>
-                <p className="text-slate-700 font-normal tracking-tight leading-loose break-words whitespace-pre-wrap bg-slate-200 rounded-[4px] w-1/2 lg:w-2/5 px-3 py-2">
+                <p className="text-slate-700 font-normal tracking-tight leading-loose break-words whitespace-pre-wrap bg-slate-200 rounded-[4px] max-w-[50%] lg:max-w-[40%] px-3 py-2">
                   {message.value}
                 </p>
               </div>

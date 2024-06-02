@@ -1,5 +1,5 @@
 .env
-configuration/index.js
+client/src/configuration/index.js
 
 # Logs
 logs

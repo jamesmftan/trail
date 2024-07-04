@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ExitModal from "./ExitModal";
 import { LogOut } from "lucide-react";
 
-const ExitButton = () => {
+const ExitButton = ({ socket }) => {
   const [exitModalOpen, setExitModalOpen] = useState(false);
   const exitModalClick = () => {
     setExitModalOpen(!exitModalOpen);
@@ -15,7 +15,9 @@ const ExitButton = () => {
       >
         <LogOut />
       </button>
-      {exitModalOpen && <ExitModal exitModalClick={exitModalClick} />}
+      {exitModalOpen && (
+        <ExitModal socket={socket} exitModalClick={exitModalClick} />
+      )}
     </>
   );
 };

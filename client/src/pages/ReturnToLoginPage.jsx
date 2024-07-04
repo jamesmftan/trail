@@ -10,12 +10,12 @@ const ReturnToLoginPage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowDisconnected(true);
-    }, 10000);
+    }, 60000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  const returnLoginPage = () => {
+  const returnToLoginPage = () => {
     navigate("/");
   };
 
@@ -28,7 +28,7 @@ const ReturnToLoginPage = () => {
       </p>
       <button
         className="text-white bg-slate-700 hover:bg-slate-950 shadow-lg rounded-md border-2 border-slate-200 justify-center flex flex-row items-center gap-1.5 px-5 py-1.5 transition-all duration-300"
-        onClick={returnLoginPage}
+        onClick={returnToLoginPage}
       >
         Login Page
         <span>

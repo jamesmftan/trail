@@ -6,8 +6,9 @@ const ExitModal = ({ socket, exitModalClick }) => {
   const navigate = useNavigate();
 
   const logOut = () => {
-    navigate("/");
     socket.disconnect();
+    navigate("/");
+    window.location.reload();
   };
   return (
     <div className="bg-slate-700 bg-opacity-50 justify-center flex flex-row items-center mx-auto fixed inset-0 z-[60] gap-10 pt-3 pb-3 pl-8 pr-8 lg:pl-10 lg:pr-10">

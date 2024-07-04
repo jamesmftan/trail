@@ -15,7 +15,6 @@ const grad1 = {
     y2: ["100%", "20%", "20%"],
   },
 };
-
 const grad2 = {
   initial: {
     x1: "0%",

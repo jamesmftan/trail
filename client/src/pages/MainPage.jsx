@@ -4,7 +4,7 @@ import TrailMap from "../components/TrailMap";
 import BottomSection from "../components/BottomSection";
 import ReturnToLoginPage from "./ReturnToLoginPage";
 
-const MainPage = ({ socket }) => {
+const MainPage = ({ socket, isConnected }) => {
   const [authentication, setAuthentication] = useState(null);
 
   useEffect(() => {
@@ -18,6 +18,8 @@ const MainPage = ({ socket }) => {
       socket.off("users");
     };
   }, [socket]);
+
+  if (!isConnected) return <ReturnToLoginPage />;
 
   return (
     <>

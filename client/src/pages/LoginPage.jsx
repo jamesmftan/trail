@@ -34,7 +34,7 @@ const LoginPage = ({ socket }) => {
   };
 
   return (
-    <div className="bg-slate-950 justify-center flex items-center relative h-screen p-8 overflow-hidden antialiased">
+    <div className="bg-bg-image bg-cover justify-center flex items-center relative h-screen p-8 overflow-hidden antialiased">
       <div className="bg-white shadow-2xl rounded-md flex flex-col gap-5 p-4 lg:p-8 z-50">
         <div className="space-y-3">
           <h1 className="text-2xl text-slate-700 font-bold">

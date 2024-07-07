@@ -1,4 +1,5 @@
 import React from "react";
+import { PulseBeams } from "../components/PulseBeams";
 
 const LoadingPage = () => {
   return (
@@ -22,6 +23,9 @@ const LoadingPage = () => {
       <p className="text-xl text-center text-slate-200 font-medium tracking-tight leading-loose animate-pulse">
         TRAIL IS CONNECTING TO THE SERVER, PLEASE WAIT.
       </p>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <PulseBeams />
+      </div>
     </div>
   );
 };

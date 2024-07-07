@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LoadingPage from "./LoadingPage";
+import { PulseBeams } from "../components/PulseBeams";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
@@ -27,7 +28,7 @@ const ReturnToLoginPage = () => {
         YOU'VE BEEN DISCONNECTED, RETURN TO LOGIN PAGE.
       </p>
       <button
-        className="text-white bg-slate-700 hover:bg-slate-950 shadow-lg rounded-md border-2 border-slate-200 justify-center flex flex-row items-center gap-1.5 px-5 py-1.5 transition-all duration-300"
+        className="text-white bg-slate-700 hover:bg-slate-950 shadow-lg rounded-md border-2 border-slate-200 justify-center flex flex-row items-center gap-1.5 px-5 py-1.5 z-50 transition-all duration-300"
         onClick={returnToLoginPage}
       >
         Login Page
@@ -35,6 +36,9 @@ const ReturnToLoginPage = () => {
           <ArrowRight size={20} strokeWidth={2} />
         </span>
       </button>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <PulseBeams />
+      </div>
     </div>
   );
 };
